@@ -2,150 +2,307 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard Tài Sản Công TP.HCM</title>
 
-<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f5f7fb;
-    color: #222;
+body{
+    margin:0;
+    font-family:"Segoe UI", sans-serif;
+    background:linear-gradient(120deg,#f6f9ff,#eef4ff);
+    color:#1e2a3a;
+    overflow-x:hidden;
+}
+
+/* DECOR */
+.circle{
+    position:absolute;
+    border-radius:50%;
+    background:rgba(79,140,255,0.08);
+    animation:float 10s infinite ease-in-out;
+}
+.circle1{width:200px;height:200px;top:40px;left:60px;}
+.circle2{width:120px;height:120px;bottom:60px;right:80px;}
+.circle3{width:160px;height:160px;top:200px;right:200px;}
+
+@keyframes float{
+    0%{transform:translateY(0);}
+    50%{transform:translateY(20px);}
+    100%{transform:translateY(0);}
 }
 
 /* HEADER */
-.header {
-    background: white;
-    padding: 20px;
-    text-align: center;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+.header{
+    text-align:center;
+    padding:25px;
 }
 
-.header h1 {
-    margin: 0;
-    font-size: 22px;
+.title{
+    font-size:24px;
+    font-weight:bold;
 }
 
-/* GRID */
-.container {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 15px;
-    padding: 20px;
+.subtitle{
+    color:#666;
 }
 
-/* CARD */
-.card {
-    background: white;
-    padding: 15px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    text-align: center;
+/* FILTER */
+select{
+    padding:10px 14px;
+    border-radius:10px;
+    border:1px solid #ccc;
+    margin-top:10px;
 }
 
-.card h2 {
-    font-size: 18px;
-    margin: 0;
+/* KPI */
+.grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+    max-width:1100px;
+    margin:auto;
+    padding:20px;
 }
 
-.card p {
-    font-size: 22px;
-    margin: 10px 0 0;
-    font-weight: bold;
-    color: #2c7be5;
+.card{
+    background:white;
+    padding:18px;
+    border-radius:16px;
+    box-shadow:0 6px 15px rgba(0,0,0,0.06);
 }
 
-/* CHART AREA */
-.charts {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    padding: 20px;
+.num{
+    font-size:24px;
+    font-weight:bold;
+    color:#3f7cff;
+    margin-top:10px;
 }
 
-.chart-box {
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+/* PIE SECTION FIX */
+.pie-section{
+    max-width:1100px;
+    margin:20px auto;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+    align-items:center;
+}
+
+.box{
+    background:white;
+    padding:15px;
+    border-radius:16px;
+    box-shadow:0 6px 15px rgba(0,0,0,0.05);
+}
+
+.pie-wrap{
+    width:220px;
+    height:220px;
+    margin:auto;
+}
+
+/* INFO PANEL */
+.info{
+    background:#f3f7ff;
+    padding:18px;
+    border-radius:16px;
+}
+
+.info h3{
+    margin-top:0;
+    color:#2f6fff;
+}
+
+.item{
+    background:white;
+    padding:12px;
+    border-radius:12px;
+    margin-bottom:10px;
+}
+
+.label{
+    font-size:13px;
+    color:#666;
+}
+
+.value{
+    font-size:22px;
+    font-weight:bold;
+}
+
+/* CHARTS */
+.charts{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+    max-width:1100px;
+    margin:20px auto;
+}
+
+/* AI */
+.ai{
+    max-width:1100px;
+    margin:20px auto;
+    background:#eaf2ff;
+    padding:18px;
+    border-radius:16px;
+}
+
+/* MOBILE */
+@media(max-width:900px){
+    .grid{grid-template-columns:1fr 1fr;}
+    .pie-section{grid-template-columns:1fr;}
+    .charts{grid-template-columns:1fr;}
 }
 </style>
 </head>
 
 <body>
 
+<div class="circle circle1"></div>
+<div class="circle circle2"></div>
+<div class="circle circle3"></div>
+
 <div class="header">
-    <h1>📊 DASHBOARD TÀI SẢN CÔNG TP.HCM</h1>
-    <p>Phân tích sắp xếp & xử lý nhà, đất công</p>
+<div class="title">📊 DASHBOARD TÀI SẢN CÔNG TP.HCM</div>
+<div class="subtitle">Báo cáo tổng hợp nhà đất công</div>
+
+<select id="khuvuc" onchange="doiKhuVuc()">
+<option value="all">Toàn Thành Phố</option>
+<option value="hcm">TP.HCM</option>
+<option value="bd">Bình Dương</option>
+<option value="brvt">Bà Rịa - Vũng Tàu</option>
+</select>
 </div>
 
 <!-- KPI -->
-<div class="container">
-    <div class="card">
-        <h2>Tổng tài sản</h2>
-        <p>14,625</p>
-    </div>
-    <div class="card">
-        <h2>Giữ lại sử dụng</h2>
-        <p>9,434</p>
-    </div>
-    <div class="card">
-        <h2>Thu hồi / điều chuyển</h2>
-        <p>370</p>
-    </div>
-    <div class="card">
-        <h2>Đang xử lý</h2>
-        <p>4,806</p>
-    </div>
+<div class="grid">
+<div class="card">Tổng tài sản<div class="num" id="t1">14625</div></div>
+<div class="card">Trong phạm vi<div class="num" id="t2">9819</div></div>
+<div class="card">Ngoài phạm vi<div class="num" id="t3">4806</div></div>
+<div class="card">Doanh nghiệp<div class="num" id="t4">919</div></div>
+</div>
+
+<!-- PIE + PANEL (FIXED) -->
+<div class="pie-section">
+
+<div class="box">
+<h3>📊 Cơ cấu xử lý tài sản</h3>
+<div class="pie-wrap">
+<canvas id="pieChart"></canvas>
+</div>
+</div>
+
+<div class="info">
+<h3>📌 Chi tiết số liệu</h3>
+
+<div class="item">
+<div class="label">Giữ lại sử dụng</div>
+<div class="value" style="color:#3f7cff;">9.434</div>
+</div>
+
+<div class="item">
+<div class="label">Thu hồi / điều chuyển</div>
+<div class="value" style="color:#ff6b6b;">370</div>
+</div>
+
+<div class="item">
+<div class="label">Khác</div>
+<div class="value" style="color:#6bcBef;">15</div>
+</div>
+
+<p style="margin-top:10px;font-size:13px;color:#555;">
+✔ Giữ lại chiếm tỷ trọng lớn, cho thấy hệ thống tài sản đang ưu tiên ổn định và khai thác hiện trạng.
+</p>
+
+</div>
+
 </div>
 
 <!-- CHARTS -->
 <div class="charts">
+<div class="box"><h3>Phân bổ đơn vị</h3><canvas id="c2"></canvas></div>
+<div class="box"><h3>Quỹ đất</h3><canvas id="c3"></canvas></div>
+</div>
 
-    <div class="chart-box">
-        <h3>Phân bổ tài sản công</h3>
-        <canvas id="pieChart"></canvas>
-    </div>
-
-    <div class="chart-box">
-        <h3>Cơ cấu theo đối tượng quản lý</h3>
-        <canvas id="barChart"></canvas>
-    </div>
-
+<!-- AI -->
+<div class="ai">
+<h3>🤖 Nhận xét tự động</h3>
+<p id="ai"></p>
 </div>
 
 <script>
-// PIE CHART
-new Chart(document.getElementById("pieChart"), {
-    type: 'pie',
-    data: {
-        labels: ['Giữ lại sử dụng', 'Thu hồi', 'Khác'],
-        datasets: [{
-            data: [9434, 370, 4821],
-            backgroundColor: ['#4e79a7','#e15759','#76b7b2']
-        }]
-    }
+
+/* DATA */
+const data={
+all:{t1:14625,t2:9819,t3:4806,t4:919},
+hcm:{t1:9000,t2:6000,t3:3000,t4:500},
+bd:{t1:3000,t2:2500,t3:500,t4:200},
+brvt:{t1:2625,t2:1319,t3:1306,t4:219}
+};
+
+function doiKhuVuc(){
+let r=document.getElementById("khuvuc").value;
+let d=data[r];
+
+document.getElementById("t1").innerText=d.t1;
+document.getElementById("t2").innerText=d.t2;
+document.getElementById("t3").innerText=d.t3;
+document.getElementById("t4").innerText=d.t4;
+
+AI(r);
+}
+
+function AI(r){
+let t="";
+if(r=="all") t="Quy mô lớn, cần tăng số hóa và khai thác quỹ đất.";
+else if(r=="hcm") t="TP.HCM áp lực cao, cần tối ưu hóa tài sản.";
+else if(r=="bd") t="Bình Dương có tiềm năng tái cơ cấu.";
+else t="Bà Rịa - Vũng Tàu ổn định dài hạn.";
+
+document.getElementById("ai").innerText=t;
+}
+AI("all");
+
+/* PIE */
+new Chart(document.getElementById("pieChart"),{
+type:"pie",
+data:{
+labels:["Giữ lại","Thu hồi","Khác"],
+datasets:[{
+data:[9434,370,15],
+backgroundColor:["#3f7cff","#ff6b6b","#6bcBef"]
+}]
+},
+options:{
+responsive:true,
+maintainAspectRatio:false
+}
 });
 
-// BAR CHART
-new Chart(document.getElementById("barChart"), {
-    type: 'bar',
-    data: {
-        labels: ['UBND xã', 'Sở ngành', 'Đơn vị sự nghiệp', 'Đảng', 'Mặt trận'],
-        datasets: [{
-            label: 'Số cơ sở',
-            data: [7984, 901, 124, 273, 116],
-            backgroundColor: '#2c7be5'
-        }]
-    },
-    options: {
-        scales: {
-            y: { beginAtZero: true }
-        }
-    }
+/* BAR */
+new Chart(document.getElementById("c2"),{
+type:"bar",
+data:{
+labels:["UBND","Sở ngành","Đảng","Sự nghiệp","MTTQ"],
+datasets:[{data:[7984,901,273,124,116],backgroundColor:"#3f7cff"}]
+}
 });
+
+/* DOUGHNUT */
+new Chart(document.getElementById("c3"),{
+type:"doughnut",
+data:{
+labels:["BT","Đấu giá","Quy hoạch","Thu hồi"],
+datasets:[{
+data:[28,44,426,172],
+backgroundColor:["#3f7cff","#6bcBef","#9ad0ff","#ffb86b"]
+}]
+}
+});
+
 </script>
 
 </body>
