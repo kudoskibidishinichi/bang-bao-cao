@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard Tài Sản Công TP.HCM</title>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f7fb;
+    color: #222;
+}
+
+/* HEADER */
+.header {
+    background: white;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 22px;
+}
+
+/* GRID */
+.container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    padding: 20px;
+}
+
+/* CARD */
+.card {
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    text-align: center;
+}
+
+.card h2 {
+    font-size: 18px;
+    margin: 0;
+}
+
+.card p {
+    font-size: 22px;
+    margin: 10px 0 0;
+    font-weight: bold;
+    color: #2c7be5;
+}
+
+/* CHART AREA */
+.charts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    padding: 20px;
+}
+
+.chart-box {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>📊 DASHBOARD TÀI SẢN CÔNG TP.HCM</h1>
+    <p>Phân tích sắp xếp & xử lý nhà, đất công</p>
+</div>
+
+<!-- KPI -->
+<div class="container">
+    <div class="card">
+        <h2>Tổng tài sản</h2>
+        <p>14,625</p>
+    </div>
+    <div class="card">
+        <h2>Giữ lại sử dụng</h2>
+        <p>9,434</p>
+    </div>
+    <div class="card">
+        <h2>Thu hồi / điều chuyển</h2>
+        <p>370</p>
+    </div>
+    <div class="card">
+        <h2>Đang xử lý</h2>
+        <p>4,806</p>
+    </div>
+</div>
+
+<!-- CHARTS -->
+<div class="charts">
+
+    <div class="chart-box">
+        <h3>Phân bổ tài sản công</h3>
+        <canvas id="pieChart"></canvas>
+    </div>
+
+    <div class="chart-box">
+        <h3>Cơ cấu theo đối tượng quản lý</h3>
+        <canvas id="barChart"></canvas>
+    </div>
+
+</div>
+
+<script>
+// PIE CHART
+new Chart(document.getElementById("pieChart"), {
+    type: 'pie',
+    data: {
+        labels: ['Giữ lại sử dụng', 'Thu hồi', 'Khác'],
+        datasets: [{
+            data: [9434, 370, 4821],
+            backgroundColor: ['#4e79a7','#e15759','#76b7b2']
+        }]
+    }
+});
+
+// BAR CHART
+new Chart(document.getElementById("barChart"), {
+    type: 'bar',
+    data: {
+        labels: ['UBND xã', 'Sở ngành', 'Đơn vị sự nghiệp', 'Đảng', 'Mặt trận'],
+        datasets: [{
+            label: 'Số cơ sở',
+            data: [7984, 901, 124, 273, 116],
+            backgroundColor: '#2c7be5'
+        }]
+    },
+    options: {
+        scales: {
+            y: { beginAtZero: true }
+        }
+    }
+});
+</script>
+
+</body>
+</html>
